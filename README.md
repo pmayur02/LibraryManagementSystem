@@ -1,4 +1,4 @@
-# 📚 Library Management System (GraphQL)
+# Library Management System (GraphQL)
 
 This project is a Library Management System backend built using  Node.js, Express, Apollo Server (GraphQL), and MongoDB (Mongoose).
 
@@ -7,7 +7,7 @@ the GraphQL endpoint directly.
 
 ---
 
-## 🚀 Tech Stack
+##  Tech Stack
 
 - Node.js
 - Express
