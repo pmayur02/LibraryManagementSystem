@@ -53,6 +53,7 @@ module.exports.return= async(payload,userId)=>{
     try {
         
       const record = await Borrow.findById(payload);
+      if(!record) throw new Error("No Borrow Record Found.")
       if (record.user.toString() !== userId) {
         throw new Error("Unauthorized");
       }

@@ -36,8 +36,9 @@ module.exports.getUsers = async()=>{
 
 module.exports.getUser = async(id)=>{
     try {
+        if(!id) throw new Error("enter valid user id.")
         const users = await User.findById(id);
-        if(!users) return "No user found!";
+        if(!users) return [];
         return users;
     } catch (error) {
         throw new Error(error.message);
@@ -76,8 +77,8 @@ module.exports.updateUser = async(payload)=>{
         const exists =await User.findOne({email:payload.email, _id:{$ne:payload.id}})
         if(exists) throw new Error("user with same email already exists");
         updates.email = payload.email;
-        return await User.findByIdAndUpdate(payload.id,updates,{new:true});
       } 
+      return await User.findByIdAndUpdate(payload.id,updates,{new:true});
 
       
     } catch (error) {
