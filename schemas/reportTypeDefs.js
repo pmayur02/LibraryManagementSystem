@@ -13,15 +13,15 @@ type ActiveMember {
 }
 
 type BookAvailabilityReport {
-  totalBooks: Int!
-  borrowedBooks: Int!
-  availableBooks: Int!
+  totalCopies: Int!
+  borrowedCopies: Int!
+  availableCopies: Int!
 }
 
 type Query {
   mostBorrowedBooks(limit: Int): [MostBorrowedBook]
   activeMembers(limit: Int): [ActiveMember]
-  bookAvailabilityReport: BookAvailabilityReport
+  bookAvailabilityReport: [BookAvailabilityReport]
 }
 `;
 

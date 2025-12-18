@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const borrowSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // linking user collection
   book: { type: mongoose.Schema.Types.ObjectId, ref: "Book" },
   borrowedAt: { type: Date, default: Date.now },
   returnedAt: Date,

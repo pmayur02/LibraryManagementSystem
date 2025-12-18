@@ -11,7 +11,7 @@ type User{
     id:ID!    
     name: String!
     email:String!
-    role: Role!
+    role: Role
     createdAt: String
     updatedAt: String
 }
@@ -27,7 +27,7 @@ type Query{
 }
 
 type Mutation{
-    createUser(name:String!, email:String!, password:String!,role:String): AuthPayload
+    createUser(name:String!, email:String!, password:String!,role:Role): AuthPayload
     loginUser(email:String!, password:String!):AuthPayload
     updateUser(id:ID!, name:String, email:String, role:Role ):User
     deleteUser(id:ID!):Boolean

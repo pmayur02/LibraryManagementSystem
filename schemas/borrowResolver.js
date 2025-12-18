@@ -10,15 +10,13 @@ const borrowResolvers = {
   },
 
     Mutation: {
-    borrow: async (_, { id }, { user }) => {
+    borrow: async (_, { id }, { user }) => { // bookid
       if (!user) throw new Error("Unauthorized");
-      await isAdmin(user.userId);
       return await borrowService.borrow(id,user.userId); 
     },
 
-    return: async (_, { id }, { user }) => {
+    return: async (_, { id }, { user }) => { // borrowId
       if (!user) throw new Error("Unauthorized");
-      await isAdmin(user.userId);
       return await borrowService.return(id,user.userId);
     }
   }

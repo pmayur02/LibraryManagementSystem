@@ -93,14 +93,14 @@ module.exports.deleteUser = async (id, userId) => {
             throw new Error("Admin cannot delete themselves");
         }
 
-        const existingUser = await User.findById(userId);
+        const existingUser = await User.findById(id);
         if (!existingUser) {
             throw new Error("User not found");
         }
 
         // user must not have active borrows
         const activeBorrows = await Borrow.countDocuments({
-            user: userId,
+            user: id,
             status: "BORROWED",
         });
 

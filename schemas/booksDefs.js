@@ -36,7 +36,7 @@ type Mutation{
     author: String
     genre: String
     totalCopies: Int
-    availableCopies: Int!
+    availableCopies: Int
    ): Book
 
    deleteBook(id: ID!): Boolean

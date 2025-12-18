@@ -1,5 +1,6 @@
 const Borrow = require("../models/borrower");
 const Book = require("../models/books");
+// const User = require("../models/users");
 const mongoose = require("mongoose");
 
 
@@ -23,7 +24,8 @@ module.exports.borrow = async (bookId, userId) => {
       throw new Error("Book not available");
     }
 
-    // Optional: prevent duplicate borrow
+    // const user = await User.findById(userId);
+    //prevent duplicate borrow
     const alreadyBorrowed = await Borrow.findOne({
       user: userId,
       book: bookId,
@@ -41,7 +43,8 @@ module.exports.borrow = async (bookId, userId) => {
     book.availableCopies -= 1;
     await book.save();
 
-    return {borrow, book};
+    const borrowData = await Borrow.findById(borrow._id).populate("book").populate("user");
+    return borrowData
   } catch (error) {
     throw new Error(error.message);
   }
@@ -66,7 +69,7 @@ module.exports.return= async(payload,userId)=>{
       book.availableCopies += 1;
       await book.save();
 
-      return  await Borrow.findById(record._id).populate("book");
+      return  await Borrow.findById(record._id).populate("book").populate("user");
     } catch (error) {
         throw new Error(error.message);
     }
@@ -75,6 +78,7 @@ module.exports.return= async(payload,userId)=>{
 
 module.exports.mostBorrowedBooks= async (limit) => {
     try {
+        if(!limit) limit =10;
         const result = await Borrow.aggregate([
             {
                 $group: {
@@ -109,6 +113,7 @@ module.exports.mostBorrowedBooks= async (limit) => {
 
 module.exports.activeMembers = async (limit) => {
     try {
+        if(!limit) limit =10;
         const result = await Borrow.aggregate([
             {
                 $group: {
@@ -140,34 +145,22 @@ module.exports.activeMembers = async (limit) => {
 }
 
 module.exports.bookAvailabilityReport = async () => {
-    try {
-        const result = await Book.aggregate([
-            {
-                $group: {
-                    _id: null,
-                    totalBooks: { $sum: "$totalCopies" },
-                    availableBooks: { $sum: "$availableCopies" },
-                },
-            },
-            {
-                $project: {
-                    _id: 0,
-                    totalBooks: 1,
-                    availableBooks: 1,
-                    borrowedBooks: {
-                        $subtract: ["$totalBooks", "$availableBooks"],
-                    },
-                },
-            },
-        ]);
+  try {
+    const result = await Book.aggregate([
+      {
+        $project: {
+          title: 1,
+          totalCopies: 1,
+          availableCopies: 1,
+          borrowedCopies: {
+            $subtract: ["$totalCopies", "$availableCopies"]
+          }
+        }
+      }
+    ]);
 
-        return result[0] || {
-            totalBooks: 0,
-            availableBooks: 0,
-            borrowedBooks: 0,
-        };
-
-    } catch (error) {
-        throw new Error(error.message);
-    }
-}
+    return result;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

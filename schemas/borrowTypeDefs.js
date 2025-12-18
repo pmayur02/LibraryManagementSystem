@@ -7,7 +7,7 @@ type Borrow {
   user: User!
   borrowedAt: String!
   returnedAt: String
-  status: String!
+  status: String
 }
 
 type Query {

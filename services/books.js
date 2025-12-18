@@ -6,8 +6,11 @@ module.exports.addBook = async (payload, adminId) => {
             !payload.genre || !payload.totalCopies || !payload.availableCopies
         ) throw new Error("enter valid data.");
 
-        payload = { ...payload, adminId: adminId }
+        if(payload.availableCopies > payload.totalCopies) throw new Error("available copies cannot be more than total copies.");
+
+        payload = { ...payload, publicationDate: new Date(payload.publicationDate),adminId: adminId }
         const book = new Book(payload);
+
 
 
         await book.save()
@@ -42,6 +45,8 @@ module.exports.getBook = async (id) => {
 module.exports.bookss = async (payload) => {
     try {
         const filter = {};
+        if(!payload.page) payload.page = 1;
+        if(!payload.limit) payload.limit = 10;
         if (payload.genre) filter.genre = payload.genre;
         if (payload.author) filter.author = payload.author;
         return Book.find(filter).skip((payload.page - 1) * payload.limit).limit(payload.limit);
